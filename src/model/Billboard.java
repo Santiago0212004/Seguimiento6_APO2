@@ -1,12 +1,12 @@
 package model;
 
-public class Hoarding {
+public class Billboard {
 	private int width;
 	private int height;
 	private boolean inUse;
 	private String brand;
 	
-	public Hoarding(int width, int height, boolean inUse, String brand) {
+	public Billboard(int width, int height, boolean inUse, String brand) {
 		this.width = width;
 		this.height = height;
 		this.inUse = inUse;
