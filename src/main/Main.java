@@ -1,6 +1,8 @@
 package main;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.util.Scanner;
 
@@ -9,11 +11,15 @@ import model.BillboardData;
 
 public class Main {
 	
-	static String path = "src/Datos1.csv";
-	static BillboardData data = new BillboardData(path);
+	static String path;
+	static BillboardData data;
 	static Scanner sc = new Scanner(System.in);
 	
 	public static void main(String[] args) {
+		
+		System.out.println("Escriba el path del archivo: ");
+		path = sc.next();
+		data = new BillboardData(path);
 		
 		int choice;
 		
@@ -43,13 +49,17 @@ public class Main {
 			showBillboards();
 		}
 		else if(choice == 3) {
-			securityReport();
+			try {
+				securityReport();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}
 	
 	public static void addBillboard() {
-		System.out.println("\\nWrite billboard values separated by ++: \n");
+		System.out.println("\nWrite billboard values separated by ++: \n");
 
 		String billboardString = sc.nextLine();
 		
@@ -112,7 +122,17 @@ public class Main {
 		System.out.println("Total: "+i+" billboards");
 	}
 	
-	public static void securityReport() {
+	public static void securityReport() throws IOException {
+		
+		String reportPath = "src/report.txt";
+		
+		File report = new File(reportPath);
+		
+		if (!report.exists()) {
+			report.createNewFile();
+        }
+		
+		PrintWriter pw = new PrintWriter(reportPath);
 		
 		System.out.println("--------------------------");
 		System.out.println("DANGEROUS BILLBOARD REPORT");
@@ -123,9 +143,11 @@ public class Main {
 		
 		for(Billboard b : data.getBillboards()) {
 			if((b.getWidth()*b.getHeight())>200000) {
-				System.out.println(i+". Billboard "+b.getBrand()+" with area "+(b.getWidth()*b.getHeight())+" cm2");
+				System.out.println(i+". Billboard "+b.getBrand()+" with area "+(b.getWidth()*b.getHeight())+" cm2\n");
+				pw.println(i+". Billboard "+b.getBrand()+" with area "+(b.getWidth()*b.getHeight())+" cm2");
 				i++;
 			}
 		}
+		pw.close();
 	}
 }
